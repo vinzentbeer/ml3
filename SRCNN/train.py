@@ -3,6 +3,7 @@ import os
 import copy
 
 import torch
+import torch_directml
 from torch import nn
 import torch.optim as optim
 import torch.backends.cudnn as cudnn
@@ -34,7 +35,8 @@ if __name__ == '__main__':
 
     cudnn.benchmark = True
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-
+    device = torch_directml.device()
+    torch.set_default_device(device)
     torch.manual_seed(args.seed)
 
     model = SRCNN().to(device)

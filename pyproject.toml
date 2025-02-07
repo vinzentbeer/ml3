@@ -3,12 +3,12 @@ name = "ml3"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
     "h5py>=3.12.1",
     "ipykernel>=6.29.5",
     "numpy>=2.2.2",
     "pillow>=11.1.0",
-    "torch>=2.6.0",
+    "torch-directml>=0.2.5.dev240914",
     "tqdm>=4.67.1",
 ]
