@@ -4,7 +4,7 @@ import torch
 import torch.backends.cudnn as cudnn
 import numpy as np
 import PIL.Image as pil_image
-
+import torch_directml
 from models import SRCNN
 from utils import convert_rgb_to_ycbcr, convert_ycbcr_to_rgb, calc_psnr
 
@@ -18,7 +18,8 @@ if __name__ == '__main__':
 
     cudnn.benchmark = True
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-
+    #device = torch_directml.device()
+    #torch.set_default_device(device)
     model = SRCNN().to(device)
 
     state_dict = model.state_dict()
