@@ -37,7 +37,7 @@ if __name__ == '__main__':
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     device = torch_directml.device()
     torch.set_default_device(device)
-    torch.manual_seed(args.seed)
+    #torch.manual_seed(args.seed)
 
     model = SRCNN().to(device)
     criterion = nn.MSELoss()
