@@ -1,0 +1,7 @@
+.idea
+venv
+data
+src/__pycache__/model.cpython-311.pyc
+src/__pycache__/data_loading.cpython-311.pyc
+src/todelete.py
+/comparison_model_output_images
