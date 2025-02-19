@@ -74,11 +74,12 @@ def train_model(model, trainloader, validloader, criterion, optimizer, epochs, c
                     return model
 
         torch.save(model.state_dict(), f'../model/model_{epoch}_final.pt')
-        filename = os.path.join("../model/", 'losses.csv')
+    filename = os.path.join("../model/", 'losses.csv')
 
-        if not os.path.exists(filename):
-            with open(filename, "w") as file:
-                file.write(str(losses))
+    
+    with open(filename, "w") as file:
+        for loss_value in losses:
+            file.write(loss_value)
 
         
     return model
