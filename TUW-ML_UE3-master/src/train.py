@@ -110,4 +110,4 @@ if __name__ == '__main__':
     filename = os.path.join("../model/", 'losses.csv')
     with open(filename, "w") as file:
         for loss_value in losses:
-            file.write(loss_value)
+            file.write(str(loss_value))
