@@ -18,11 +18,13 @@ from utils import load_config, parse_args
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def evaluate_model(model, testloader, config):
+
     model = model.to(device)
+    #model.eval() switches layers like BatchNorm and Dropout to evaluation mode
     model.eval()
     
     eval_score_path = config['evaluate']['eval_score_path']
-
+    # get metrics like in the paper
     psnr = PeakSignalNoiseRatio().to(device)
     ssim = StructuralSimilarityIndexMeasure().to(device)
     msssim = MultiScaleStructuralSimilarityIndexMeasure().to(device)
@@ -34,6 +36,8 @@ def evaluate_model(model, testloader, config):
     #total_psnrbe = 0.0
     num_batches = 0
 
+    #no grad: disables gradient calculation during model inference or evaluation since we are not training. 
+    # since our tensors are initialized with requires_grad=true by default, we need to explicitly disable it here
     with torch.no_grad():
         for i, data in enumerate(tqdm(testloader)):
             # get the inputs; data is a list of [inputs, labels]
@@ -49,6 +53,7 @@ def evaluate_model(model, testloader, config):
             #total_psnrbe += psnrbe(outputs, labels).item()
             num_batches += 1
 
+        
         psnr_ret = round(total_psnr / num_batches, 4)
         ssim_ret = round(total_ssim / num_batches, 4)
         msssim_ret = round(total_msssim / num_batches, 4)

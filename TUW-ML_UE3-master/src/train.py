@@ -13,6 +13,7 @@ from test import evaluate_model
 from utils import load_config, parse_args
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+losses = list()
 
 
 def train_model(model, trainloader, validloader, criterion, optimizer, epochs, config):
@@ -27,7 +28,7 @@ def train_model(model, trainloader, validloader, criterion, optimizer, epochs, c
 
     log_loss_every_nth_batch = len(trainloader) // 10
     validate_every_nth_batch = len(trainloader) // 3
-
+   
     for epoch in range(1, epochs + 1):
         tqdm_postfix = {'loss': 0}
         accumulated_loss = 0
@@ -51,7 +52,7 @@ def train_model(model, trainloader, validloader, criterion, optimizer, epochs, c
             # add statistics to progress bar
             tqdm_postfix['loss'] = loss.item()
             tqdm_loader.set_postfix(tqdm_postfix)
-
+            losses.append(loss.item())
             if i % log_loss_every_nth_batch == log_loss_every_nth_batch - 1:
                 print(f"Average loss of current batch interval: {accumulated_loss / log_loss_every_nth_batch:.4f}")
                 accumulated_loss = 0
@@ -73,6 +74,13 @@ def train_model(model, trainloader, validloader, criterion, optimizer, epochs, c
                     return model
 
         torch.save(model.state_dict(), f'../model/model_{epoch}_final.pt')
+        filename = os.path.join("../model/", 'losses.csv')
+
+        if not os.path.exists(filename):
+            with open(filename, "w") as file:
+                file.write(str(losses))
+
+        
     return model
 
 
