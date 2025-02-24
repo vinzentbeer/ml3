@@ -64,9 +64,9 @@ def train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, con
     """Trains the model for one epoch."""
     model.train()  # Set model to training mode
     
-    log_loss_every_nth_batch = config['train'].get('log_loss_every_nth_batch', len(trainloader) // 10) #Get the number of logging intervals from the config, if not present, use default
-    if log_loss_every_nth_batch == 0:
-        log_loss_every_nth_batch = 1 # log every batch if there are few batches
+    log_loss_every_n_batches = config['train'].get('log_loss_every_n_batches', len(trainloader) // 10)
+    # Ensure at least one log per epoch, even if trainloader is small
+    log_loss_every_n_batches = max(1, log_loss_every_n_batches)
 
     accumulated_loss = 0.0
     tqdm_loader = tqdm(trainloader, desc=f"Epoch [{epoch}/{config['train']['epochs']}]")
@@ -86,8 +86,8 @@ def train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, con
 
         tqdm_loader.set_postfix({'loss': loss.item()})  # Update progress bar
 
-        if (i + 1) % log_loss_every_nth_batch == 0:
-            avg_loss = accumulated_loss / log_loss_every_nth_batch
+        if (i + 1) % log_loss_every_n_batches == 0:
+            avg_loss = accumulated_loss / log_loss_every_n_batches
             logging.info(f"Epoch [{epoch}/{config['train']['epochs']}], Batch [{i+1}/{len(trainloader)}], Avg Loss: {avg_loss:.4f}")
             accumulated_loss = 0.0
 
@@ -113,25 +113,26 @@ def validate_model(model, validloader, criterion, device, config):
     return validation_metrics
 
 def train_model(model, trainloader, validloader, criterion, optimizer, config, device):
-    #Trains the model and validates it on the validation set using the standard canonical pytorch training lloop
+    """
+    Trains the SRCNN model with validation and early stopping.
+    """
     model = model.to(device)
-    
-    epochs = config['train']['epochs']
-    validate_every_nth_batch = config['train'].get('validate_every_nth_batch', len(trainloader) // 3) #Get the number of validation intervals from the config, if not present, use default
 
-    patience = config['train'].get('patience', 10) # Default to 10 if patience not in config
-    
+    epochs = config['train']['epochs']
+    validate_every_n_epochs = config['train'].get('validate_every_n_epochs', 1)  # Validate every epoch by default
+    patience = config['train'].get('patience', 10)  # Default to 10 if patience not in config
+
     best_score = float('-inf')
     counter = 0  # Early stopping counter
     losses = []  # Store training losses
-    
+
     for epoch in range(1, epochs + 1):
         losses = train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, config, losses)
 
         # Validation and Early Stopping
-        if validate_every_nth_batch > 0 and epoch % (validate_every_nth_batch // (len(trainloader) // 10) if (len(trainloader) // 10) else 1) == 0:  #Approximate original validation frequency
+        if epoch % validate_every_n_epochs == 0:
             validation_metrics = validate_model(model, validloader, criterion, device, config)
-            
+
             if validation_metrics['PSNR'] > best_score:
                 best_score = validation_metrics['PSNR']
                 save_model(model, epoch, step="best")
@@ -143,9 +144,9 @@ def train_model(model, trainloader, validloader, criterion, optimizer, config, d
                     logging.info("Early stopping triggered.")
                     break  # Exit training loop
 
-        save_model(model, epoch, step="final") #Save at the end of each epoch
+        save_model(model, epoch, step="final")  # Save at the end of each epoch
 
-    save_losses(losses) # Save losses to file after training
+    save_losses(losses)  # Save losses to file after training
     return model
 
 

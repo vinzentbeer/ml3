@@ -11,8 +11,8 @@ train:
     # momentum: 0.9
     # dampening: 0.2
     weight_decay: 1e-5
-  log_loss_every_nth_batch: 5 #default 5
-  validate_every_nth_batch: 2 #default 2
+  log_loss_every_nth_batch: 10 #default 10
+  validate_every_n_epochs: 1 #default 1
 fine_tune:
   batch_size: 4
   learning_rate: 0.0001
