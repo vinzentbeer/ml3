@@ -22,15 +22,7 @@ class SRCNNDataset(Dataset):
     """
 
     def __init__(self, root_dir: str, resample_scale_factor: int = 2, subset_percentage: float = 0.1):
-        """
-        Args:
-            root_dir: Root directory containing the 'train2017' subdirectory
-                      with original images.
-            resample_scale_factor:  Factor by which to downscale and then upscale
-                                    the images to create the low-resolution input.
-            subset_percentage:  Percentage of images to use from the 'train2017'
-                                directory (for faster experimentation).
-        """
+       
         self.root_dir = root_dir
         self.original_dir = os.path.join(root_dir, 'train2017')
         self.resample_scale_factor = resample_scale_factor

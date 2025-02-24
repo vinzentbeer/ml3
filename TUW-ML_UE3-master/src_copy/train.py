@@ -13,14 +13,12 @@ from test import evaluate_model
 from utils import load_config, parse_args
 import logging
 
-# --- Constants ---
+#constants and logger
 MODEL_DIR = "../model"
 LOSSES_FILE = os.path.join(MODEL_DIR, 'losses.csv')
-
-# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# --- Helper Functions ---
+#helper functions (but not nice and functional, they have side effects :/)
 
 def save_model(model, epoch, step=None):
     """Saves the model state dictionary."""
@@ -115,21 +113,7 @@ def validate_model(model, validloader, criterion, device, config):
     return validation_metrics
 
 def train_model(model, trainloader, validloader, criterion, optimizer, config, device):
-    """
-    Trains the SRCNN model with validation and early stopping.
-
-    Args:
-        model: The SRCNN model.
-        trainloader: DataLoader for the training set.
-        validloader: DataLoader for the validation set.
-        criterion: Loss function.
-        optimizer: Optimizer.
-        config: Configuration dictionary.
-        device:  'cuda' or 'cpu'
-
-    Returns:
-        The trained model.
-    """
+    #Trains the model and validates it on the validation set using the standard canonical pytorch training lloop
     model = model.to(device)
     
     epochs = config['train']['epochs']
