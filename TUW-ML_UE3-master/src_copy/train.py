@@ -33,7 +33,7 @@ def save_model(model, epoch, step=None):
 
 def save_losses(losses, filename=LOSSES_FILE):
     """Saves the list of losses to a CSV file."""
-    with open(filename, "w") as file:
+    with open(filename, "a") as file:
         for loss_value in losses:
             file.write(str(loss_value) + "\n")  # Added newline for CSV format
     logging.info(f"Losses saved to {filename}")
@@ -82,7 +82,7 @@ def train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, con
 
         # --- Logging and Statistics ---
         accumulated_loss += loss.item()
-        losses.append(loss.item())
+        losses.append(str(loss.item()) + ", Epoch " + str(epoch))
 
         tqdm_loader.set_postfix({'loss': loss.item()})  # Update progress bar
 
