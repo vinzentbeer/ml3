@@ -12,7 +12,9 @@ import logging
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
+# Monkey-patch PIL.Image.Resampling for Pillow<9.0
+if not hasattr(PIL.Image, 'Resampling'):  # Pillow<9.0
+    Resampling = PIL.Image
 class SRCNNDataset(Dataset):
     """
     Dataset for SRCNN super-resolution training.  Loads pairs of low-resolution
