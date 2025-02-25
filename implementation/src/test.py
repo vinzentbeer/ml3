@@ -1,7 +1,7 @@
 import argparse
 import os
 from datetime import datetime
-
+import logging
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -83,50 +83,87 @@ def evaluate_model(model, testloader, config):
         'MSSSIM': msssim_ret,
         #'PSNRBE': psnrbe_ret,
     }
-
-
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 def visualize(model, testloader, config):
-    model = model.to(device)
+    """
+    Visualizes the model's output by creating a grid of input (downscaled),
+    ground truth, and model output images, with labels for each row.
+
+    Args:
+        model: The SRCNN model.
+        testloader: DataLoader for the test set.
+        config: Configuration dictionary containing visualization settings.
+        device: The device (CPU or GPU) to use.
+    """
+    model.to(device)
     model.eval()
-    
-    
+
     num_images = config['visualize']['vis_num_images']
-    print("num images " + str(num_images))
     save_path = config['visualize']['vis_save_path']
     max_visualizations = config['visualize']['max_vis']
 
-
-    save_path = save_path + '/' + datetime.now().strftime('%Y-%m-%d %H_%M_%S')
-
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
+    save_path = os.path.join(save_path, datetime.now().strftime('%Y-%m-%d_%H_%M_%S'))
+    os.makedirs(save_path, exist_ok=True)
 
     visualization_count = 0
 
     with torch.no_grad():
-        for i, data in enumerate(tqdm(testloader)):
-            inputs, labels = data
+        for i, (inputs, labels) in enumerate(tqdm(testloader, desc="Visualizing")):
             inputs, labels = inputs.to(device), labels.to(device)
-
             outputs = model(inputs)
 
-            # Convert the tensors to RGB images
-            inputs_rgb = inputs.cpu().numpy()
-            labels_rgb = labels.cpu().numpy()
-            outputs_rgb = outputs.cpu().numpy()
+            #number of images to visualize from the batch
+            inputs_vis = inputs[:num_images].cpu()
+            labels_vis = labels[:num_images].cpu()
+            outputs_vis = outputs[:num_images].cpu()
 
-            # Combine the images into a grid
-            img_grid = np.concatenate((inputs_rgb[:num_images], labels_rgb[:num_images], outputs_rgb[:num_images]),
-                                      axis=0)
+            #make sure all tensors have the same number of channels (3 for RGB).... nasty bug potential
+            if inputs_vis.shape[1] != 3:
+                inputs_vis = inputs_vis.repeat(1, 3 // inputs_vis.shape[1], 1, 1)
+            if labels_vis.shape[1] != 3:
+                labels_vis = labels_vis.repeat(1, 3 // labels_vis.shape[1], 1, 1)
+            if outputs_vis.shape[1] != 3:
+                outputs_vis = outputs_vis.repeat(1, 3 // outputs_vis.shape[1], 1, 1)
 
-            # Create a figure and display the grid
-            fig, ax = plt.subplots(figsize=(20, 20))
-            ax.imshow(make_grid(torch.from_numpy(img_grid), nrow=num_images).permute(1, 2, 0))
-            ax.axis('off')
-            plt.title('Input Images (Downscaled), Ground Truth, and Model Outputs')
+            # Create a grid for each row
+            input_grid = make_grid(inputs_vis, nrow=num_images, padding=2, pad_value=1) #pad_value for white background
+            label_grid = make_grid(labels_vis, nrow=num_images, padding=2, pad_value=1)
+            output_grid = make_grid(outputs_vis, nrow=num_images, padding=2, pad_value=1)
+
+            # Convert the grids to numpy arrays and transpose dimensions for display
+            input_grid_np = input_grid.cpu().permute(1, 2, 0).numpy()
+            label_grid_np = label_grid.cpu().permute(1, 2, 0).numpy()
+            output_grid_np = output_grid.cpu().permute(1, 2, 0).numpy()
+
+            # Clip values to be within the valid range [0, 1]
+            input_grid_np = np.clip(input_grid_np, 0, 1)
+            label_grid_np = np.clip(label_grid_np, 0, 1)
+            output_grid_np = np.clip(output_grid_np, 0, 1)
+
+         
+            fig, axs = plt.subplots(3, 1, figsize=(15, 15))  # 3 rows, 1 column
+
+            # Display each grid with a label
+            axs[0].imshow(input_grid_np)
+            axs[0].set_title("Input (Downscaled)")
+            axs[0].axis('off')
+
+            axs[1].imshow(label_grid_np)
+            axs[1].set_title("Ground Truth")
+            axs[1].axis('off')
+
+            axs[2].imshow(output_grid_np)
+            axs[2].set_title("Model Output")
+            axs[2].axis('off')
+
+            # Adjust layout to prevent overlapping titles
+            plt.tight_layout()
 
             # Save the plot
-            plt.savefig(os.path.join(save_path, f'visualization_{i + 1}.png'))
+            filepath = os.path.join(save_path, f'visualization_{i + 1}.png')
+            plt.savefig(filepath)
+            logging.info(f"Visualization saved to {filepath}")
+            plt.close(fig)
 
             visualization_count += 1
             if visualization_count >= max_visualizations:

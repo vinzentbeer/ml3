@@ -22,8 +22,8 @@
         "subset_percentage": 1.0
     },
     "visualize": {
-      "vis_num_images": 5,
+      "vis_num_images": 8,
       "vis_save_path": "../visualizations",
-      "max_vis": 3
+      "max_vis": 5
     }
   }
