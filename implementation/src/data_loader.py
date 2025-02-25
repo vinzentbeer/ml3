@@ -132,7 +132,7 @@ def get_dataloaders(root_dir: str = '../data/',
         shuffle=True,
         collate_fn=pad_images_to_same_size,
         pin_memory=True,
-        num_workers = os.cpu_count() # Use all CPUs available
+        #num_workers = os.cpu_count() # Use all CPUs available
     )
 
     validation_loader = DataLoader(
@@ -141,7 +141,7 @@ def get_dataloaders(root_dir: str = '../data/',
         shuffle=False,  # No need to shuffle validation data
         collate_fn=pad_images_to_same_size,
         pin_memory=True,
-        num_workers = os.cpu_count()
+        #num_workers = os.cpu_count()
     )
 
     test_loader = DataLoader(
@@ -150,7 +150,7 @@ def get_dataloaders(root_dir: str = '../data/',
         shuffle=False,
         collate_fn=pad_images_to_same_size,
         pin_memory=True,
-        num_workers = os.cpu_count()
+        #num_workers = os.cpu_count()
     )
 
     logging.info(f"Train dataset size: {len(train_dataset)}")

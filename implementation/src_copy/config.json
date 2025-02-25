@@ -16,7 +16,7 @@
     },
     "evaluate": {
       "batch_size": 64,
-      "eval_score_path": "../eval_scores"
+      "eval_score_path": "../eval_score"
     },
     "dataset": {
         "subset_percentage": 0.1
