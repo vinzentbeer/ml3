@@ -21,7 +21,7 @@ def load_config(config_path):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='TUW-ML_UE3: SRCNN Parameters')
-    parser.add_argument('--config', type=str, help='Path to the config file', default='../src_copy/config.json')
+    parser.add_argument('--config', type=str, help='Path to the config file', default='../src/config.json')
     parser.add_argument('--vis_num_images', type=int, help='Numer of comparison images/visualizations')
     parser.add_argument('--vis_save_path', type=str, help='Directory path to save comparison images/visualizations')
     parser.add_argument('--max_vis', type=int, help='Maximum number of images/visualizations')
