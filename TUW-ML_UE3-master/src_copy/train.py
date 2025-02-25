@@ -155,7 +155,7 @@ def train_model(model, trainloader, validloader, criterion, optimizer, config, d
 # --- Main Execution ---
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="SRCNN Training Script")
-    parser.add_argument('--config', type=str, default='config.yaml', help='Path to the config file.')
+    parser.add_argument('--config', type=str, default='config.json', help='Path to the config file.')
     parser.add_argument('--learning_rate', type=float, help='Learning rate for training.')
     parser.add_argument('--epochs', type=int, help='Number of epochs to train.')
 

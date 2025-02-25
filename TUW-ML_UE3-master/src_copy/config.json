@@ -1,0 +1,29 @@
+{
+    "input": {
+      "resample_scale_factor": 2
+    },
+    "train": {
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "epochs": 50,
+      "patience": 10,
+      "log_loss_every_n_batches": 10,
+      "validate_every_n_epochs": 1,
+      "optimizer": {
+        "name": "adam",
+        "weight_decay": 1e-5
+      }
+    },
+    "evaluate": {
+      "batch_size": 64,
+      "eval_score_path": "../eval_scores"
+    },
+    "dataset": {
+        "subset_percentage": 0.1
+    },
+    "visualize": {
+      "vis_num_images": 5,
+      "vis_save_path": "../visualizations",
+      "max_vis": 3
+    }
+  }

@@ -181,7 +181,7 @@ def get_dataloaders(root_dir: str = '../data/',
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="SRCNN DataLoaders")
-    parser.add_argument('--config', type=str, default='config.yaml', help='Path to the config file.')
+    parser.add_argument('--config', type=str, default='config.json', help='Path to the config file.')
     parser.add_argument('--resample_scale_factor', type=int, help='Resample scale factor.')
     parser.add_argument('--batch_size', type=int, help='Batch size for training.')
     parser.add_argument('--batch_size_test', type=int, help='Batch size for testing.')

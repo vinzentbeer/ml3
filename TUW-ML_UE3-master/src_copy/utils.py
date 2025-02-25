@@ -1,16 +1,27 @@
 import argparse
 import yaml
 
-def load_config(config_path='config.yaml'):
+def load_config_yaml(config_path='config.yaml'):
     with open(config_path, 'r') as file:
         config = yaml.safe_load(file)
     return config
     
-    
+import json
+
+def load_config(config_path):
+
+    try:
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+        return config
+    except FileNotFoundError:
+        raise FileNotFoundError(f"ile not found: {config_path}")
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Error decoding JSON file: {config_path} - {e}")    
 
 def parse_args():
     parser = argparse.ArgumentParser(description='TUW-ML_UE3: SRCNN Parameters')
-    parser.add_argument('--config', type=str, help='Path to the config file', default='../src_copy/config.yaml')
+    parser.add_argument('--config', type=str, help='Path to the config file', default='../src_copy/config.json')
     parser.add_argument('--vis_num_images', type=int, help='Numer of comparison images/visualizations')
     parser.add_argument('--vis_save_path', type=str, help='Directory path to save comparison images/visualizations')
     parser.add_argument('--max_vis', type=int, help='Maximum number of images/visualizations')
