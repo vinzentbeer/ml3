@@ -15,22 +15,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # Monkey-patch PIL.Image.Resampling for Pillow<9.0
 if not hasattr(PIL.Image, 'Resampling'):  # Pillow<9.0
     Resampling = PIL.Image
+
+https://www.scaler.com/topics/pytorch/map-style-vs-itetrable-datasets/
 class SRCNNDataset(Dataset):
-    """
-    Dataset for SRCNN super-resolution training.  Loads pairs of low-resolution
-    (degraded) and high-resolution (original) images.
-    """
+    #reference implementation used same res images in the pixel count, so we did the same
 
     def __init__(self, root_dir: str, resample_scale_factor: int = 2, subset_percentage: float = 0.1):
-        """
-        Args:
-            root_dir: Root directory containing the 'train2017' subdirectory
-                      with original images.
-            resample_scale_factor:  Factor by which to downscale and then upscale
-                                    the images to create the low-resolution input.
-            subset_percentage:  Percentage of images to use from the 'train2017'
-                                directory (for faster experimentation).
-        """
+
         self.root_dir = root_dir
         self.original_dir = os.path.join(root_dir, 'train2017')
         self.resample_scale_factor = resample_scale_factor
@@ -46,11 +37,9 @@ class SRCNNDataset(Dataset):
         return len(self.image_files)
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
-        Returns:
-            A tuple containing:
-                - low_res_image (torch.Tensor): The degraded, low-resolution image.
-                - high_res_image (torch.Tensor): The original, high-resolution image.
+        """ output has a: 
+                - low_res_image (torch.Tensor)
+                - high_res_image (torch.Tensor)
         """
         img_name = self.image_files[idx]
         img_path = os.path.join(self.original_dir, img_name)
@@ -72,21 +61,19 @@ class SRCNNDataset(Dataset):
 
 def pad_images_to_same_size(batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, torch.Tensor]:
     """
-    Collates a batch of images, padding them to the maximum dimensions in the batch.
+    Map style dataset: Outputs a Batch in the form of a tuple of tensors
 
-    Args:
-        batch: A list of (img, label) tuples, where img and label are tensors.
+    we take in a  batch:list of (img, label) tuples, where img and label are tensors.
 
-    Returns:
-        A tuple containing:
+    Out: 
             - images (torch.Tensor): A tensor of shape (batch_size, C, H, W) containing the padded images.
             - labels (torch.Tensor): A tensor of shape (batch_size, C, H, W) containing the padded labels.
     """
-    # Find maximum dimensions
+
     max_height = max([img.shape[1] for img, label in batch])  # Shape is (C, H, W)
     max_width = max([img.shape[2] for img, label in batch])
 
-    # Pad images
+    #pad iamges to max width and height by adding white pixels aorund 
     padded_imgs = []
     padded_labels = []
     for img, label in batch:
@@ -97,14 +84,14 @@ def pad_images_to_same_size(batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> T
         pad_right = pad_width - pad_left
         pad_bottom = pad_height - pad_top
 
-        # Use functional padding for tensors
+        # torch builtin functional padding for tensors
         padded_img = torch.nn.functional.pad(img, (pad_left, pad_right, pad_top, pad_bottom), mode='constant', value=1)  # Assuming 1 is white
         padded_label = torch.nn.functional.pad(label, (pad_left, pad_right, pad_top, pad_bottom), mode='constant', value=1)
 
         padded_imgs.append(padded_img)
         padded_labels.append(padded_label)
 
-    # Stack images and labels
+    #stack into one tensor each
     images = torch.stack(padded_imgs)
     labels = torch.stack(padded_labels)
 
@@ -119,22 +106,6 @@ def get_dataloaders(root_dir: str = '../data/',
                     seed: Optional[int] = None,
                     val_split: float = 0.1,
                     test_split: float = 0.1) -> Tuple[DataLoader, DataLoader, DataLoader]:
-    """
-    Creates and returns the training, validation, and test DataLoaders.
-
-    Args:
-        root_dir: Root directory of the dataset.
-        resample_scale_factor: Scale factor for resampling images.
-        batch_size: Batch size for training DataLoader.
-        batch_size_test: Batch size for validation and test DataLoaders.
-        subset_percentage: Percentage of the dataset to use.
-        seed: Random seed for reproducibility.
-        val_split: Validation set split size.
-        test_split: Test set split size.
-
-    Returns:
-        A tuple containing the training, validation, and test DataLoaders.
-    """
 
     dataset = SRCNNDataset(root_dir, resample_scale_factor, subset_percentage)
     total_len = len(dataset)
