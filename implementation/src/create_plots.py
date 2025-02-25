@@ -8,10 +8,10 @@ import numpy as np
 loss_values = np.loadtxt("../model/losses.csv", delimiter=",", usecols=0)
 print(loss_values)
 
-psnr_values = np.loadtxt("../eval_score/evaluation_scores.csv", usecols=1, skiprows=1, delimiter=",")
+psnr_values = np.loadtxt("../results/evaluation_scores.csv", usecols=1, skiprows=1, delimiter=",")
 print(psnr_values)
 
-ssim_values = np.loadtxt("../eval_score/evaluation_scores.csv", usecols=2, skiprows=1, delimiter=",")
+ssim_values = np.loadtxt("../results/evaluation_scores.csv", usecols=2, skiprows=1, delimiter=",")
 print(ssim_values)
 
 # Generate x-axis values for loss (10 values per epoch)

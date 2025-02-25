@@ -19,7 +19,7 @@ fine_tune:
   epochs: 2
 evaluate:
   batch_size: 4
-  eval_score_path: '../eval_score'
+  eval_score_path: '../results'
 visualize:
   vis_num_images: 4
   vis_save_path: '../comparison_model_output_images'

@@ -15,7 +15,7 @@ Commands to download, train and test the model:
 
 ```shell
 cd src
-python download.py
+python get_dataset.py
 python train.py
 python test.py
 ```
@@ -34,7 +34,7 @@ There are snapshots for each epoch and a final model.
 Here you can see 12 images (from model.pt), the first row being the downscaled images, the second row the ground truth
 and the last row the upscaled images.
 
-![visualization_1.png](eval_score/visualization_1.png)
+![visualization_1.png](results/visualization_1.png)
 
 ### Dataset
 
@@ -49,6 +49,6 @@ Training was done in 3 steps:
 * Epoch 25-32 with a learning rate of 0.0005
 * Epoch 33-50 with a learning rate of 0.0001
 
-![loss.png](eval_score/loss.png)
-![psnr.png](eval_score/psnr.png)
-![ssim.png](eval_score/ssim.png)
+![loss.png](results/loss.png)
+![psnr.png](results/psnr.png)
+![ssim.png](results/ssim.png)
