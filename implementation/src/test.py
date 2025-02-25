@@ -174,14 +174,8 @@ if __name__ == '__main__':
     
     args = parse_args()
         
-    # Load configuration from file
     config = load_config(args.config)
-    
-    ## Override config with command-line arguments if provided
-    #vis_num_images = args.vis_num_images if args.vis_num_images is not None else config['visualize']['vis_num_images']
-    #vis_save_path = args.vis_save_path if args.vis_save_path is not None else config['visualize']['vis_save_path']
-    #max_vis = args.max_vis if args.max_vis is not None else config['visualize']['max_vis']
-    #eval_score_path = args.eval_score_path if args.eval_score_path is not None else config['evaluate']['eval_score_path']
+  
     
     # Override config with command-line arguments if provided
     if args.vis_num_images is not None:
