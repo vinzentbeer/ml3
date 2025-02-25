@@ -64,7 +64,7 @@ def evaluate_model(model, testloader, config):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        filename = os.path.join(directory, 'evaluation_scores.csv')
+        filename = os.path.join(directory, 'evaluation_metrics_results.csv')
 
         # Check if the file exists, create with headers if not
         if not os.path.exists(filename):

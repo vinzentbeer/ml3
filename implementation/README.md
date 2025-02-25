@@ -1,4 +1,4 @@
-# Image Superresolution
+# Topic 3.2: Deep Learning: Image Upscaling
 
 ## Setup
 
@@ -6,7 +6,7 @@ Run the following commands to install dependencies.
 You can also use your IDE to achieve this.
 
 ```shell
-conda create -n TUW-ML_UE3 python=3.11
+conda create -n TUW-ML_UE3 python=3.10
 conda activate TUW-ML_UE3
 pip install -r requirements.txt
 ```
@@ -31,23 +31,22 @@ There are snapshots for each epoch and a final model.
 
 ### Visualizations
 
-Here you can see 12 images (from model.pt), the first row being the downscaled images, the second row the ground truth
-and the last row the upscaled images.
+In the following our result after 100 epochs of training is displayed. 
+In this case it is not the coco dataset but another smaller one we also used to compare.
 
-![visualization_1.png](results/visualization_1.png)
+![visualization_1.png](visualizations/2025-02-25%2012_07_44/visualization_1.png)
+
+Here the coco dataset results are shown:
+
+
 
 ### Dataset
 
-The coco dataset was used to train the model.  
-Since this dataset is quite large, only 10% were used.
+The coco dataset was used to train the model. We used 100% of the dataset 
+even though it was very large. (around 12h training time)
 
 ### Training
 
-Training was done in 3 steps:
-
-* Epoch 1-24 with a learning rate of 0.001
-* Epoch 25-32 with a learning rate of 0.0005
-* Epoch 33-50 with a learning rate of 0.0001
 
 ![loss.png](results/loss.png)
 ![psnr.png](results/psnr.png)
