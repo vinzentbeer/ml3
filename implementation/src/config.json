@@ -4,7 +4,7 @@
     },
     "train": {
       "batch_size": 32,
-      "learning_rate": 0.001,
+      "learning_rate": 0.0001,
       "epochs": 50,
       "patience": 10,
       "log_loss_every_n_batches": 10,
@@ -22,8 +22,8 @@
         "subset_percentage": 1.0
     },
     "visualize": {
-      "vis_num_images": 8,
+      "vis_num_images": 4,
       "vis_save_path": "../visualizations",
-      "max_vis": 5
+      "max_vis": 4
     }
   }
