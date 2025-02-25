@@ -21,7 +21,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 #helper functions (but not nice and functional, they have side effects :/)
 
 def save_model(model, epoch, step=None):
-    """Saves the model state dictionary."""
     filename = f"model_{epoch}"
     if step is not None:
         filename += f"_{step}"
@@ -32,7 +31,6 @@ def save_model(model, epoch, step=None):
 
 
 def save_losses(losses, filename=LOSSES_FILE):
-    """Saves the list of losses to a CSV file."""
     with open(filename, "a") as file:
         for loss_value in losses:
             file.write(str(loss_value) + "\n")  # Added newline for CSV format
@@ -40,7 +38,6 @@ def save_losses(losses, filename=LOSSES_FILE):
 
 
 def create_optimizer(model, config):
-    """Creates an optimizer based on the configuration."""
     optimizer_config = config['train']['optimizer']
     optimizer_name = optimizer_config['name'].lower()
     learning_rate = config['train']['learning_rate']
@@ -61,8 +58,7 @@ def create_optimizer(model, config):
 
 
 def train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, config, losses):
-    """Trains the model for one epoch."""
-    model.train()  # Set model to training mode
+    model.train()  #set model to training mode!!!! This is weirdly named, since it sounds like it would train straight away
     
     log_loss_every_n_batches = config['train'].get('log_loss_every_n_batches', len(trainloader) // 10)
     # Ensure at least one log per epoch, even if trainloader is small
@@ -95,7 +91,6 @@ def train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, con
 
 
 def validate_model(model, validloader, criterion, device, config):
-    """Evaluates the model on the validation set."""
     model.eval()  # Set model to evaluation mode
     total_loss = 0.0
     with torch.no_grad():  # Disable gradient calculation during validation
@@ -113,9 +108,7 @@ def validate_model(model, validloader, criterion, device, config):
     return validation_metrics
 
 def train_model(model, trainloader, validloader, criterion, optimizer, config, device):
-    """
-    Trains the SRCNN model with validation and early stopping.
-    """
+
     model = model.to(device)
 
     epochs = config['train']['epochs']
@@ -123,8 +116,8 @@ def train_model(model, trainloader, validloader, criterion, optimizer, config, d
     patience = config['train'].get('patience', 10)  # Default to 10 if patience not in config
 
     best_score = float('-inf')
-    counter = 0  # Early stopping counter
-    losses = []  # Store training losses
+    counter = 0  #for early stopping. if it goes over patience, we stop
+    losses = []  
 
     for epoch in range(1, epochs + 1):
         losses = train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, config, losses)
@@ -136,17 +129,17 @@ def train_model(model, trainloader, validloader, criterion, optimizer, config, d
             if validation_metrics['PSNR'] > best_score:
                 best_score = validation_metrics['PSNR']
                 save_model(model, epoch, step="best")
-                counter = 0  # Reset early stopping counter
+                counter = 0  # Reset early stopping counter. This logic is not that good, it almost always fires even when it might not be the best
             else:
                 logging.info("No improvement in PSNR.")
                 counter += 1
                 if counter >= patience:
                     logging.info("Early stopping triggered.")
-                    break  # Exit training loop
+                    break  # Exit training loop here
 
-        save_model(model, epoch, step="final")  # Save at the end of each epoch
+        save_model(model, epoch, step="final")  #saves a model per epoch. might be overkill.
 
-    save_losses(losses)  # Save losses to file after training
+    save_losses(losses)
     return model
 
 

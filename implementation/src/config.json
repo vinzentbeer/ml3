@@ -19,7 +19,7 @@
       "eval_score_path": "../results"
     },
     "dataset": {
-        "subset_percentage": 0.1
+        "subset_percentage": 1.0
     },
     "visualize": {
       "vis_num_images": 5,
