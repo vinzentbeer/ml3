@@ -1,5 +1,5 @@
 import argparse
-
+import json
 
 def load_config(config_path):
 
@@ -13,7 +13,7 @@ def load_config(config_path):
         raise ValueError(f"Error decoding JSON file: {config_path} - {e}")    
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Parameters')
+    parser = argparse.ArgumentParser(description=' SRCNN Parameters')
     parser.add_argument('--config', type=str, help='Path to the config file', default='../src/config.json')
     parser.add_argument('--vis_num_images', type=int, help='Numer of comparison images/visualizations')
     parser.add_argument('--vis_save_path', type=str, help='Directory path to save comparison images/visualizations')
