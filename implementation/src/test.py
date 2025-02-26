@@ -196,7 +196,7 @@ if __name__ == '__main__':
 
 
     model = SRCNN()
-    model.load_state_dict(torch.load('../model_ratrainedWith5EpochsWithMoreData/model_55_best.pt', map_location=device))
+    model.load_state_dict(torch.load('../modelOriginal/model_100_best.pt', map_location=device))
     _, _, testloader = get_dataloaders(seed=42, resample_scale_factor=resample_scale_factor)
     
     visualize(model, testloader, config)
