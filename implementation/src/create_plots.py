@@ -14,17 +14,14 @@ print(psnr_values)
 ssim_values = np.loadtxt("../results/evaluation_metrics_results.csv", usecols=2, skiprows=1, delimiter=",")
 print(ssim_values)
 
-# Generate x-axis values for loss (10 values per epoch)
 num_epochs = len(loss_values) #// 296
 loss_x = np.arange(0, num_epochs + 1, 1 / 296)
 loss_x = loss_x[:len(loss_values)]
 
-# Generate x-axis values for PSNR (3 values per epoch)
 num_epochs = len(psnr_values) #// 3
 psnr_x = np.arange(0, num_epochs + 1, 1 )#/ 3)
 psnr_x = psnr_x[:len(psnr_values)]
 
-# Generate x-axis values for SSIM (3 values per epoch)
 num_epochs = len(ssim_values) #// 3
 ssim_x = np.arange(0, num_epochs + 1, 1 )#/ 3)
 ssim_x = ssim_x[:len(ssim_values)]
