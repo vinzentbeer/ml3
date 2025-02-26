@@ -46,7 +46,7 @@ def evaluate_model(model, testloader, config, log_file="train_eval_metrics.csv")
 
             outputs = model(inputs)
 
-            # Accumulate PSNR and SSIM values
+            # Accumulates metrics
             total_psnr += psnr(outputs, labels).item()
             total_ssim += ssim(outputs, labels).item()
             total_msssim += msssim(outputs, labels).item()
