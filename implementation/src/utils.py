@@ -1,12 +1,5 @@
 import argparse
-import yaml
 
-def load_config_yaml(config_path='config.yaml'):
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
-    return config
-    
-import json
 
 def load_config(config_path):
 
