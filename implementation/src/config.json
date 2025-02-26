@@ -15,7 +15,7 @@
         "weight_decay": 1e-5
       },
       "model_dir" : "../model",
-      "start_from_checkpoint": true
+      "start_from_checkpoint": false
     },
     "evaluate": {
       "batch_size": 64,

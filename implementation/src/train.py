@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import yaml
+
 
 from data_loader import get_dataloaders
 from model import SRCNN
@@ -122,7 +122,7 @@ def train_model(model, trainloader, validloader, criterion, optimizer, config, d
     counter = 0  #for early stopping. if it goes over patience, we stop
     losses = []  
 
-    for epoch in range(50, epochs + 1):
+    for epoch in range(1, epochs + 1):
         losses = train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, config, losses)
 
         # Validation and Early Stopping

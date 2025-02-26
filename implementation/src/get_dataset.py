@@ -3,7 +3,7 @@ import os
 import urllib.request
 
 import tqdm
-import yaml
+
 
 from utils import load_config, parse_args
 
