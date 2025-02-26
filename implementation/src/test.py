@@ -104,7 +104,7 @@ def visualize(model, testloader, config):
     start_at = 6
     save_path = os.path.join(save_path, datetime.now().strftime('%Y-%m-%d_%H_%M_%S'))
     os.makedirs(save_path, exist_ok=True)
-    num_images = num_images + start_at
+    #num_images = num_images + start_at
     visualization_count = 0
 
     with torch.no_grad():
@@ -113,9 +113,9 @@ def visualize(model, testloader, config):
             outputs = model(inputs)
 
             #number of images to visualize from the batch
-            inputs_vis = inputs[start_at:num_images].cpu()
-            labels_vis = labels[start_at:num_images].cpu()
-            outputs_vis = outputs[start_at:num_images].cpu()
+            inputs_vis = inputs[:num_images].cpu()
+            labels_vis = labels[:num_images].cpu()
+            outputs_vis = outputs[:num_images].cpu()
 
             #make sure all tensors have the same number of channels (3 for RGB).... nasty bug potential
             if inputs_vis.shape[1] != 3:
