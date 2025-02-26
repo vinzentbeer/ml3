@@ -188,10 +188,16 @@ if __name__ == '__main__':
         config['evaluate']['eval_score_path'] = args.eval_score_path
 
 
+  
+    resample_scale_factor = config["input"]["resample_scale_factor"]
+
+
+    
+
 
     model = SRCNN()
-    model.load_state_dict(torch.load('../models/model_5_final.pt', map_location=device))
-    _, _, testloader = get_dataloaders(seed=42)
+    model.load_state_dict(torch.load('../models/model_11_best.pt', map_location=device))
+    _, _, testloader = get_dataloaders(seed=42, resample_scale_factor=resample_scale_factor)
     
     visualize(model, testloader, config)
     metrics = evaluate_model(model, testloader, config)

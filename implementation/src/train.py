@@ -175,6 +175,7 @@ if __name__ == '__main__':
     logging.info(f"Using resample scale factor: {resample_scale_factor}")
 
     MODEL_DIR = config['train']['model_dir'] #does this work with constants?
+    LOSSES_FILE = os.path.join(MODEL_DIR, 'losses.csv')
 
     if not os.path.exists(MODEL_DIR):
         os.makedirs(MODEL_DIR, exist_ok=True)
