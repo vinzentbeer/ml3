@@ -85,16 +85,7 @@ def evaluate_model(model, testloader, config, log_file="train_eval_metrics.csv")
     }
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 def visualize(model, testloader, config):
-    """
-    Visualizes the model's output by creating a grid of input (downscaled),
-    ground truth, and model output images, with labels for each row.
-
-    Args:
-        model: The SRCNN model.
-        testloader: DataLoader for the test set.
-        config: Configuration dictionary containing visualization settings.
-        device: The device (CPU or GPU) to use.
-    """
+   
     model.to(device)
     model.eval()
 
@@ -168,6 +159,8 @@ def visualize(model, testloader, config):
             visualization_count += 1
             if visualization_count >= max_visualizations:
                 break
+
+
 
 
 if __name__ == '__main__':
