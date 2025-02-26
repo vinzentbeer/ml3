@@ -69,7 +69,7 @@ def evaluate_model(model, testloader, config, log_file="train_eval_metrics.csv")
         
         if not os.path.exists(filename):
             with open(filename, "w") as file:
-                file.write("Date/Time, PSNR, SSIM\n")
+                file.write("Date/Time, PSNR, SSIM, MSSSIM\n")
 
         # Open the file in append mode
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
