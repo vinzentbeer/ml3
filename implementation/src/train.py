@@ -173,6 +173,10 @@ if __name__ == '__main__':
 
     MODEL_DIR = config['train']['model_dir'] #does this work with constants?
 
+    if not os.path.exists(MODEL_DIR):
+        os.makedirs(MODEL_DIR, exist_ok=True)
+
+
     model = SRCNN().to(device) #Move model to device here
     start_from_checkpoint = config['train'].get('start_from_checkpoint', False)
     if(start_from_checkpoint):
@@ -193,5 +197,5 @@ if __name__ == '__main__':
 
 
     save_model(model, config['train']['epochs'], step="final")
-    # Moved save_losses call into the train_model function after training completes.
-    logging.info("Training complete.")
+    #oved save_losses call into the train_model function after training completes.
+    logging.info("Training complete! Woo! Yeah! We did it! We trained a model! Yay!")
