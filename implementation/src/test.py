@@ -17,7 +17,7 @@ from utils import load_config, parse_args
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def evaluate_model(model, testloader, config):
+def evaluate_model(model, testloader, config, log_file="train_eval_metrics.csv"):
 
     model = model.to(device)
     #model.eval() switches layers like BatchNorm and Dropout to evaluation mode
@@ -64,9 +64,9 @@ def evaluate_model(model, testloader, config):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        filename = os.path.join(directory, 'evaluation_metrics_results.csv')
+        filename = os.path.join(directory, log_file)
 
-        # Check if the file exists, create with headers if not
+        
         if not os.path.exists(filename):
             with open(filename, "w") as file:
                 file.write("Date/Time, PSNR, SSIM\n")
@@ -74,7 +74,7 @@ def evaluate_model(model, testloader, config):
         # Open the file in append mode
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         with open(filename, "a") as file:
-            file.write(f'{current_time}, {psnr_ret}, {ssim_ret}')
+            file.write(f'{current_time}, {psnr_ret}, {ssim_ret}, {msssim_ret}')
             file.write('\n')
 
     return {

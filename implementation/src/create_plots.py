@@ -14,16 +14,19 @@ print(psnr_values)
 ssim_values = np.loadtxt("../results/evaluation_metrics_results.csv", usecols=2, skiprows=1, delimiter=",")
 print(ssim_values)
 
+
+
+
 num_epochs = len(loss_values) #// 296
 loss_x = np.arange(0, num_epochs + 1, 1 / 296)
 loss_x = loss_x[:len(loss_values)]
 
-num_epochs = len(psnr_values) #// 3
-psnr_x = np.arange(0, num_epochs + 1, 1 )#/ 3)
+num_epochs = len(psnr_values) 
+psnr_x = np.arange(0, num_epochs + 1, 1 )
 psnr_x = psnr_x[:len(psnr_values)]
 
-num_epochs = len(ssim_values) #// 3
-ssim_x = np.arange(0, num_epochs + 1, 1 )#/ 3)
+num_epochs = len(ssim_values)
+ssim_x = np.arange(0, num_epochs + 1, 1 )
 ssim_x = ssim_x[:len(ssim_values)]
 
 # Plot the loss values

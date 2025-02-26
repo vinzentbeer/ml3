@@ -5,11 +5,13 @@
 Run the following commands to install dependencies.  
 You can also use your IDE to achieve this.
 
-```shell
-conda create -n TUW-ML_UE3 python=3.10
-conda activate TUW-ML_UE3
-pip install -r requirements.txt
-```
+pip install uv
+python3 -m uv sync 
+
+this will create a venv you can use to run the code.
+
+Alternatively, if you don't want to use uv, set up a python 3.10 installation and run pip install -r requirements.txt
+
 
 Commands to download, train and test the model:
 
@@ -42,8 +44,8 @@ Here the coco dataset results are shown:
 
 ### Dataset
 
-The coco dataset was used to train the model. We used 100% of the dataset 
-even though it was very large. (around 12h training time)
+The coco dataset was used to train the model. We used 10% of the dataset 
+even though it was very large. (more than 12h training time)
 
 ### Training
 
