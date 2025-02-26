@@ -119,7 +119,7 @@ def train_model(model, trainloader, validloader, criterion, optimizer, config, d
     counter = 0  #for early stopping. if it goes over patience, we stop
     losses = []  
 
-    for epoch in range(40, epochs + 1):
+    for epoch in range(1, epochs + 1):
         losses = train_one_epoch(model, trainloader, criterion, optimizer, epoch, device, config, losses)
 
         # Validation and Early Stopping
@@ -161,16 +161,33 @@ if __name__ == '__main__':
     if args.epochs is not None:
         config['train']['epochs'] = args.epochs
 
+    resample_scale_factor = args.resample_scale_factor if args.resample_scale_factor is not None else config['input']['resample_scale_factor']
+    batch_size = args.batch_size if args.batch_size is not None else config['train']['batch_size']
+    batch_size_test = args.batch_size_test if args.batch_size_test is not None else config['evaluate']['batch_size']
+    subset_percentage = config['dataset'].get('subset_percentage', 0.1) #Default to 0.1 if not set
+    dataset_folder = config['dataset'].get('dataset_folder', 'train2017') 
+
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logging.info(f"Using device: {device}")
 
+    MODEL_DIR = config['train']['model_dir'] #does this work with constants?
+
     model = SRCNN().to(device) #Move model to device here
-    model.load_state_dict(torch.load('../model/model_39_final.pt', map_location=device))
+    start_from_checkpoint = config['train'].get('start_from_checkpoint', False)
+    if(start_from_checkpoint):
+        model.load_state_dict(torch.load('../model/model_39_final.pt', map_location=device
+    ))  
+    #model.load_state_dict(torch.load('../model/model_39_final.pt', map_location=device))
     criterion = nn.MSELoss()
     optimizer = create_optimizer(model, config) # Use function to create optimizer
+    #dataset_folder = config["dataset"].get("dataset_folder", "train2017")
+    
 
 
-    trainloader, validloader, _ = get_dataloaders(seed=42)
+
+
+    trainloader, validloader, _ = get_dataloaders(seed=42, subset_percentage=subset_percentage, resample_scale_factor=resample_scale_factor,batch_size=batch_size, batch_size_test=batch_size_test, dataset_folder=dataset_folder)
 
     model = train_model(model, trainloader, validloader, criterion, optimizer, config, device)
 

@@ -5,22 +5,25 @@
     },
     "train": {
       "batch_size": 32,
-      "learning_rate": 0.0001,
-      "epochs": 50,
+      "learning_rate": 0.001,
+      "epochs": 10,
       "patience": 10,
       "log_loss_every_n_batches": 10,
       "validate_every_n_epochs": 1,
       "optimizer": {
         "name": "adam",
         "weight_decay": 1e-5
-      }
+      },
+      "model_dir" : "../models",
+      "start_from_checkpoint": false
     },
     "evaluate": {
       "batch_size": 64,
       "eval_score_path": "../results"
     },
     "dataset": {
-        "subset_percentage": 1.0
+        "subset_percentage": 1.0,
+        "dataset_folder": "butterflies_train"
     },
     "visualize": {
       "vis_num_images": 4,

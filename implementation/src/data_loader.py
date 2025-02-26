@@ -48,13 +48,12 @@ class SRCNNDataset(Dataset):
         img_path = os.path.join(self.original_dir, img_name)
         image = Image.open(img_path).convert('RGB')
 
-        # Create low-resolution image
+        #create low res image based on scale factors and convert to tensors
         width, height = image.size
         new_size = (width // self.resample_scale_factor, height // self.resample_scale_factor)
         low_res_image = image.resize(new_size, resample=PIL.Image.BICUBIC)
         low_res_image = low_res_image.resize(image.size, resample=PIL.Image.BICUBIC)  # Upscale back
 
-        # Convert to tensors
         transform = transforms.ToTensor()
         low_res_tensor = transform(low_res_image)
         high_res_tensor = transform(image)
@@ -63,22 +62,10 @@ class SRCNNDataset(Dataset):
 
 
 def pad_images_to_same_size(batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, torch.Tensor]:
-    """
-    Collates a batch of images, padding them to the maximum dimensions in the batch.
 
-    Args:
-        batch: A list of (img, label) tuples, where img and label are tensors.
-
-    Returns:
-        A tuple containing:
-            - images (torch.Tensor): A tensor of shape (batch_size, C, H, W) containing the padded images.
-            - labels (torch.Tensor): A tensor of shape (batch_size, C, H, W) containing the padded labels.
-    """
-    # Find maximum dimensions
     max_height = max([img.shape[1] for img, label in batch])  # Shape is (C, H, W)
     max_width = max([img.shape[2] for img, label in batch])
 
-    # Pad images
     padded_imgs = []
     padded_labels = []
     for img, label in batch:
@@ -110,25 +97,11 @@ def get_dataloaders(root_dir: str = '../data/',
                     subset_percentage: float = 0.1,
                     seed: Optional[int] = None,
                     val_split: float = 0.1,
-                    test_split: float = 0.1) -> Tuple[DataLoader, DataLoader, DataLoader]:
-    """
-    Creates and returns the training, validation, and test DataLoaders.
+                    test_split: float = 0.1,
+                    dataset_folder:str = "train2017") -> Tuple[DataLoader, DataLoader, DataLoader]:
+ 
 
-    Args:
-        root_dir: Root directory of the dataset.
-        resample_scale_factor: Scale factor for resampling images.
-        batch_size: Batch size for training DataLoader.
-        batch_size_test: Batch size for validation and test DataLoaders.
-        subset_percentage: Percentage of the dataset to use.
-        seed: Random seed for reproducibility.
-        val_split: Validation set split size.
-        test_split: Test set split size.
-
-    Returns:
-        A tuple containing the training, validation, and test DataLoaders.
-    """
-
-    dataset = SRCNNDataset(root_dir, resample_scale_factor, subset_percentage)
+    dataset = SRCNNDataset(root_dir, resample_scale_factor, subset_percentage, dataset_folder)
     total_len = len(dataset)
     val_len = int(val_split * total_len)
     test_len = int(test_split * total_len)
@@ -194,6 +167,9 @@ if __name__ == '__main__':
     batch_size = args.batch_size if args.batch_size is not None else config['train']['batch_size']
     batch_size_test = args.batch_size_test if args.batch_size_test is not None else config['evaluate']['batch_size']
     subset_percentage = config['dataset'].get('subset_percentage', 0.1) #Default to 0.1 if not set
+    dataset_folder = config['dataset'].get('dataset_folder', 'train2017') #Default to 'train2017' if not set
+
+
 
     train_loader, val_loader, test_loader = get_dataloaders(
         root_dir='../data/',
@@ -201,10 +177,11 @@ if __name__ == '__main__':
         batch_size=batch_size,
         batch_size_test=batch_size_test,
         subset_percentage=subset_percentage,
-        seed=42
+        seed=42, 
+        dataset_folder=dataset_folder
     )
 
-    # Example usage:  Print the shape of the first batch
+    #debug output
     for i, (inputs, labels) in enumerate(train_loader):
         print("Input batch shape:", inputs.shape)
         print("Label batch shape:", labels.shape)
