@@ -1,12 +1,12 @@
 {
     "input": {
-      "resample_scale_factor": 2,
+      "resample_scale_factor": 4,
       "download_input_path": "../data"
     },
     "train": {
       "batch_size": 32,
       "learning_rate": 0.001,
-      "epochs": 10,
+      "epochs": 20,
       "patience": 10,
       "log_loss_every_n_batches": 10,
       "validate_every_n_epochs": 1,
@@ -14,7 +14,7 @@
         "name": "adam",
         "weight_decay": 1e-5
       },
-      "model_dir" : "../models",
+      "model_dir" : "../model",
       "start_from_checkpoint": false
     },
     "evaluate": {
