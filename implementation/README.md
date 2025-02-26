@@ -15,9 +15,9 @@ Commands to download, train and test the model:
 
 ```shell
 cd src
-python get_dataset.py
-python train.py
-python test.py
+python3 get_dataset.py
+python3 train.py
+python3 test.py
 ```
 
 ## Results
