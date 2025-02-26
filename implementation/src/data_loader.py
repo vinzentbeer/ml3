@@ -21,10 +21,10 @@ class SRCNNDataset(Dataset):
     (degraded) and high-resolution (original) images.
     """
 
-    def __init__(self, root_dir: str, resample_scale_factor: int = 2, subset_percentage: float = 0.1):
+    def __init__(self, root_dir: str, resample_scale_factor: int = 2, subset_percentage: float = 0.1, dataset_dir:str = 'train2017'):
        
         self.root_dir = root_dir
-        self.original_dir = os.path.join(root_dir, 'train2017')
+        self.original_dir = os.path.join(root_dir, dataset_dir)
         self.resample_scale_factor = resample_scale_factor
 
         # Load a subset of images for faster iteration

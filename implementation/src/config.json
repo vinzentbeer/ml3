@@ -1,6 +1,7 @@
 {
     "input": {
-      "resample_scale_factor": 2
+      "resample_scale_factor": 2,
+      "download_input_path": "../data"
     },
     "train": {
       "batch_size": 32,
