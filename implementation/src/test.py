@@ -190,7 +190,7 @@ if __name__ == '__main__':
 
 
     model = SRCNN()
-    model.load_state_dict(torch.load('../model/model_100_best.pt', map_location=device))
+    model.load_state_dict(torch.load('../models/model_5_final.pt', map_location=device))
     _, _, testloader = get_dataloaders(seed=42)
     
     visualize(model, testloader, config)

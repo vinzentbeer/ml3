@@ -162,10 +162,9 @@ if __name__ == '__main__':
 
     config = load_config(args.config)
 
-    # Override config with command-line arguments
-    resample_scale_factor = args.resample_scale_factor if args.resample_scale_factor is not None else config['input']['resample_scale_factor']
-    batch_size = args.batch_size if args.batch_size is not None else config['train']['batch_size']
-    batch_size_test = args.batch_size_test if args.batch_size_test is not None else config['evaluate']['batch_size']
+    resample_scale_factor = config['input']['resample_scale_factor']
+    batch_size = config['train']['batch_size']
+    batch_size_test =  config['evaluate']['batch_size']
     subset_percentage = config['dataset'].get('subset_percentage', 0.1) #Default to 0.1 if not set
     dataset_folder = config['dataset'].get('dataset_folder', 'train2017') #Default to 'train2017' if not set
 

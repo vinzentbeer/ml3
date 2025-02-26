@@ -170,6 +170,9 @@ if __name__ == '__main__':
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logging.info(f"Using device: {device}")
+    logging.info(f"Using dataset folder: {dataset_folder}")
+    logging.info(f"Using subset percentage: {subset_percentage}")
+    logging.info(f"Using resample scale factor: {resample_scale_factor}")
 
     MODEL_DIR = config['train']['model_dir'] #does this work with constants?
 
