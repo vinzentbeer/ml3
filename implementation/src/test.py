@@ -192,11 +192,11 @@ if __name__ == '__main__':
     resample_scale_factor = config["input"]["resample_scale_factor"]
 
 
-    
+
 
 
     model = SRCNN()
-    model.load_state_dict(torch.load('../model/model_11_best.pt', map_location=device))
+    model.load_state_dict(torch.load('../model/model_20_best.pt', map_location=device))
     _, _, testloader = get_dataloaders(seed=42, resample_scale_factor=resample_scale_factor)
     
     visualize(model, testloader, config)
