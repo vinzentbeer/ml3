@@ -10,6 +10,8 @@ this will create a venv you can use to run the code.
 
 Alternatively, if you don't want to use uv, set up a python 3.10 installation and run pip install -r requirements.txt
 
+(We assume you'll be using nvidia, so we did not include the RADEON specific torch versions we used for training in the requirements file)
+
 
 Commands to download, train and test the model:
 
@@ -21,6 +23,8 @@ python3 test.py #evaluates based on the model "model.pt" in the "model" subfolde
 ```
 
 We used the cells in the more_plot_testing.ipynb notebook to make the graphs.
+
+We also include the CC0 licensed dataset from https://www.kaggle.com/datasets/phucthaiv02/butterfly-image-classification in the data folder as butterflies_train (since our dataloaders do a train / test / val split anyhow)
 
 ## Results
 
