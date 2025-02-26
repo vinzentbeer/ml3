@@ -20,12 +20,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 #helper functions (but not nice and functional, they have side effects :/)
 
-def save_model(model, epoch, step=None):
+def save_model(model, epoch, step=None, is_final=False):
     filename = f"model_{epoch}"
     if step is not None:
         filename += f"_{step}"
     filename += ".pt"
+    if(is_final):
+        filename = "model.pt"
     filepath = os.path.join(MODEL_DIR, filename)
+    
     torch.save(model.state_dict(), filepath)
     logging.info(f"Model saved to {filepath}")
 
@@ -199,7 +202,7 @@ if __name__ == '__main__':
 
     model = train_model(model, trainloader, validloader, criterion, optimizer, config, device)
 
-
-    save_model(model, config['train']['epochs'], step="final")
+    #save the final model as just model.pt
+    save_model(model, config['train']['epochs'], step="final", is_final=True)
     #oved save_losses call into the train_model function after training completes.
     logging.info("Training complete! Woo! Yeah! We did it! We trained a model! Yay!")

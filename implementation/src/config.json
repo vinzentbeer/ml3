@@ -23,7 +23,7 @@
     },
     "dataset": {
         "subset_percentage": 0.25,
-        "dataset_folder": "train2017"
+        "dataset_folder": "train2017" 
     },
     "visualize": {
       "vis_num_images": 2,

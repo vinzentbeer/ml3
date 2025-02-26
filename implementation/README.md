@@ -1,9 +1,7 @@
 # Topic 3.2: Deep Learning: Image Upscaling
 
 ## Setup
-
-Run the following commands to install dependencies.  
-You can also use your IDE to achieve this.
+We used uv during development to handle dependencies.
 
 pip install uv
 python3 -m uv sync 
@@ -17,10 +15,12 @@ Commands to download, train and test the model:
 
 ```shell
 cd src
-python3 get_dataset.py
-python3 train.py
-python3 test.py
+python3 get_dataset.py- #downloads the COCO dataset (it's quite large!)
+python3 train.py #trains the model according to the parameters set in the config
+python3 test.py #evaluates based on the model "model.pt" in the "model" subfolder
 ```
+
+We used the cells in the more_plot_testing.ipynb notebook to make the graphs.
 
 ## Results
 
@@ -29,7 +29,7 @@ There are snapshots for each epoch and a final model.
 
 | Model    | PSNR    | SSIM   |
 |----------|---------|--------|
-| model.pt | 28.9451 | 0.9194 |
+| model.pt | 28.3451 | 0.9179 |
 
 ### Visualizations
 

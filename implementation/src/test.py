@@ -196,7 +196,7 @@ if __name__ == '__main__':
 
 
     model = SRCNN()
-    model.load_state_dict(torch.load('../modelButterflyScale4/model_20_final.pt', map_location=device))
+    model.load_state_dict(torch.load('../model/model.pt', map_location=device))
     _, _, testloader = get_dataloaders(seed=42, resample_scale_factor=resample_scale_factor)
     
     visualize(model, testloader, config)
